@@ -1,15 +1,15 @@
 ---
 title: "Tugas Praktikum 1"
 output:
+  pdf_document:
+    toc: true
+    toc_depth: 3
   html_document:
     theme: flatly
     toc: true
     toc_depth: 3
     toc_float: true
     code_folding: hide
-  pdf_document:
-    toc: true
-    toc_depth: 3
   word_document: default
 editor_options: 
   markdown: 
@@ -33,9 +33,9 @@ menggunakan Uji Tanda! Tentukan pula nilai P-value nya!
 ### Formulasi Hipotesis
 
 H₀: M ≤ 60 (Sebaran berat badan mahasiswa laki-laki di universitas
-tersebut tidak lebih dari 60 kg) \
+tersebut tidak lebih dari 60 kg)\
 H₁: M \> 60 (Sebaran berat badan mahasiswa laki-laki di universitas
-tersebut lebih dari 60 kg) \
+tersebut lebih dari 60 kg)\
 Uji Satu Arah Kanan
 
 ### Statistik Uji
@@ -141,9 +141,9 @@ Gunakan Uji Tanda dan hitung nilai P-value nya!
 ### Formulasi Hipotesis
 
 H₀: M ≥ 97.5 (Skor endurance tikus dengan elektrode pada otak belakang
-minimal 97.5) \
+minimal 97.5)\
 H₁: M \< 97.5 (Skor endurance tikus dengan elektrode pada otak belakang
-kurang dari 97.5) \
+kurang dari 97.5)\
 Uji Satu Arah Kiri
 
 ### Statistik Uji
@@ -250,7 +250,7 @@ menggunakan Uji Binomial!
 H₀: p ≤ 0,07 (Proporsi wanita yang menderita penyakit tersebut pada
 populasi baru tidak lebih dari 0,07) H₁: p \> 0,07 (Proporsi wanita yang
 menderita penyakit tersebut pada populasi baru lebih besar dari 0,07)
-Uji Satu Arah Kanan \
+Uji Satu Arah Kanan\
 Taraf signifikansi: $\alpha = 0,01$ (1%)
 
 ### Statistik Uji & Synrax R
@@ -296,9 +296,9 @@ pon! Gunakan taraf nyata 5% (=0.05) dan hitung nilai P-value nya!
 
 ### Formulasi Hipotesis
 
-H₀: M ≤ 163.5 (Berat badan pemain sepak bola tidak lebih dari 163.5 pon)
-\
-H₁: M \> 163.5 (Berat badan pemain sepak bola lebih dari 163.5 pon) \
+H₀: M ≤ 163.5 (Berat badan pemain sepak bola tidak lebih dari 163.5
+pon)\
+H₁: M \> 163.5 (Berat badan pemain sepak bola lebih dari 163.5 pon)\
 Uji Satu Arah Kanan
 
 ### Statistik Uji
@@ -390,8 +390,8 @@ nyata 5% (=0.05) dan tentukan nilai P-value nya!
 
 ### Formulasi Hipotesis
 
-H₀: M ≥ 45.32 (Median skor kesigapan siswa minimal 45.32) \
-H₁: M \< 45.32 (Median skor kesigapan siswa kurang dari 45.32) \
+H₀: M ≥ 45.32 (Median skor kesigapan siswa minimal 45.32)\
+H₁: M \< 45.32 (Median skor kesigapan siswa kurang dari 45.32)\
 Uji Satu Arah Kiri
 
 ### Statistik Uji
@@ -432,7 +432,7 @@ knitr::kable(ringkasan,
 
 ```{r}
 # Jalankan Uji Wilcoxon 1 Sampel
-uji_wilcoxon <- wilcox.test(skor, mu = M0, alternative = 'less', exact = FALSE, correct = TRUE)
+uji_wilcoxon <- wilcox.test(skor, mu = M0, alternative = 'less', exact = TRUE, correct = TRUE)
  
 # Tampilkan hasil analisis
 print(uji_wilcoxon)
@@ -458,7 +458,7 @@ skor <- c(33, 19, 40, 35, 51, 41, 27, 23, 39, 21,41, 31, 46, 51, 34, 37, 36, 55,
 M0 <- 45.32
 
 # Jalankan Uji Wilcoxon 1 Sampel (satu arah kiri)
-uji_wilcoxon <- wilcox.test(skor, mu = M0,alternative = "less",exact = FALSE,correct = TRUE)
+uji_wilcoxon <- wilcox.test(skor, mu = M0,alternative = "less",exact = TRUE,correct = TRUE)
 
 # Tampilkan hasil analisis
 print(uji_wilcoxon)
