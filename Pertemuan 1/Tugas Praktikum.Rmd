@@ -1,1 +1,358 @@
+---
+title: "Tugas-Pertemuan-2"
+output:
+  html_document: 
+    theme: lumen
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    code_folding: hide
+  pdf_document: default
+  word_document: default
+---
+
+Nur Annisa Hartanti Putri - M0401241051
+
+# Uji Tanda (Berat Badan Mahasiswa Laki-laki)
+## Soal
+Berat badan acak dari delapan orang mahasiswa laki-laki di suatu universitas adalah sebagai berikut (dalam kg):
+ 65,  54,  71,  50,  75,  63,  57,  63
+ Apakah sebaran berat badan mahasiswa laki-laki di universitas tersebut lebih dari 60 kg? Ujilah pada taraf nyata 5% (=0.05) menggunakan Uji Tanda! Tentukan pula nilai P-value nya!
+ 
+## Jawab
+### Formulasi Hipotesis
+H₀: M ≤ 60 (Sebaran berat badan mahasiswa laki-laki di universitas tersebut tidak lebih dari 60 kg)
+H₁: M > 60 (Sebaran berat badan mahasiswa laki-laki di universitas tersebut lebih dari 60 kg)
+Uji Satu Arah Kanan
+
+### Statistik Uji
+```{r}
+# Input data berat badan mahasiswa
+berat <- c(65, 54, 71, 50, 75, 63, 57, 63)
+M0 <- 60
+
+# Hitung selisih dan eliminasi nol jika ada
+selisih <- berat - M0
+selisih <- selisih[selisih != 0]
+
+# Hitung jumlah tanda positif (S+) dan ukuran sampel efektif n
+S_plus <- sum(selisih > 0)
+n_efektif <- length(selisih)
+
+# Tabel karakteristik data Uji Tanda
+tanda <- data.frame(
+  Berat_Badan = berat,
+  Selisih = berat - M0,
+  Tanda = ifelse(berat - M0 > 0, "+", "-")
+)
+
+# Tabel data dan tanda
+knitr::kable(tanda,
+             caption = "Karakteristik Data Berdasarkan Selisih terhadap Median Acuan")
+```
+```{r}
+# Ringkasan jumlah tanda
+ringkasan <- data.frame(
+  Tanda = c("+", "-"),
+  Jumlah = c(sum(tanda$Tanda == "+"),
+             sum(tanda$Tanda == "-"))
+)
+
+knitr::kable(ringkasan,
+             caption = "Jumlah Tanda Positif dan Negatif")
+```
+```{r}
+# Jalankan Uji Binomial (Uji Tanda) satu arah kanan
+# alternative = 'greater' karena menguji apakah median > 60
+uji_tanda <- binom.test(x = S_plus, n = n_efektif, p = 0.5, alternative = 'less')
+
+# Tampilkan hasil analisis
+print(uji_tanda)
+```
+
+### Keputusan
+Karena nilai p-value sebesar 0,3633 lebih besar dari taraf nyata \(\alpha = 0,05\), maka \(H_0\) gagal ditolak.
+
+### Kesimpulan
+Pada taraf nyata sebesar \(5\%\), tidak terdapat bukti yang cukup untuk menyatakan bahwa sebaran berat badan mahasiswa laki-laki di universitas tersebut lebih dari 60 kg. Hal ini karena diperoleh p-value sebesar 0,3633 yang lebih besar dari taraf nyata \(\alpha = 0,05\). Meskipun terdapat 5 dari 8 mahasiswa yang memiliki berat badan lebih dari 60 kg, hasil tersebut belum cukup kuat secara statistik untuk mendukung klaim bahwa sebaran berat badan mahasiswa laki-laki di universitas tersebut lebih dari 60 kg.
+
+### Syntax R
+```{r}
+# Input data berat badan mahasiswa
+berat <- c(65, 54, 71, 50, 75, 63, 57, 63)
+M0 <- 60
+
+# Hitung selisih dan eliminasi nol jika ada
+selisih <- berat - M0
+selisih <- selisih[selisih != 0]
+
+# Hitung jumlah tanda positif (S+) dan ukuran sampel efektif n
+S_plus <- sum(selisih > 0)
+n_efektif <- length(selisih)
+
+# Jalankan Uji Binomial (Uji Tanda) satu arah kanan
+# alternative = 'greater' karena menguji apakah median > 60
+uji_tanda <- binom.test(x = S_plus, n = n_efektif, p = 0.5, alternative = 'less')
+
+# Tampilkan hasil analisis
+print(uji_tanda)
+```
+
+# Uji Tanda (Skor Endurance Tikus)
+## Soal
+Suatu penelitian mengukur skor ketahanan (endurance) dari 12 ekor tikus yang ditanam elektrode pada otak belakangnya. Skor yang diperoleh adalah sebagai berikut:
+ 93.0,  89.1,  97.7,  84.4,  97.8,  94.5,  88.3,  97.5,  83.7,  94.6,  85.5,  82.6
+ Ujilah pada taraf nyata 5% (=0.05), apakah skor endurance tikus dengan elektrode pada otak belakang kurang dari 97.5? Gunakan Uji Tanda dan hitung nilai P-value nya!
+ 
+## Jawab
+### Formulasi Hipotesis
+H₀: M ≥ 97.5 (Skor endurance tikus dengan elektrode pada otak belakang minimal 97.5)
+H₁: M < 97.5 (Skor endurance tikus dengan elektrode pada otak belakang kurang dari 97.5)
+Uji Satu Arah Kiri
+
+### Statistik Uji
+```{r}
+# Input data skor endurance tikus
+endurance <- c(93.0, 89.1, 97.7, 84.4, 97.8, 94.5, 88.3, 97.5, 83.7, 94.6, 85.5, 82.6)
+M0 <- 97.5
+
+# Hitung selisih dan eliminasi nol jika ada
+selisih <- endurance - M0
+selisih <- selisih[selisih != 0]
+
+# Hitung jumlah tanda positif (S+) dan ukuran sampel efektif n
+S_plus <- sum(selisih > 0)
+n_efektif <- length(selisih)
+
+# Tabel karakteristik data Uji Tanda
+tanda <- data.frame(
+  Endurance = endurance,
+  Selisih = endurance - M0,
+  Tanda = ifelse(endurance - M0 > 0, "+", "-")
+)
+
+# Tabel data dan tanda
+knitr::kable(tanda,
+             caption = "Karakteristik Data Berdasarkan Selisih terhadap Median Acuan")
+```
+```{r}
+# Ringkasan jumlah tanda
+ringkasan <- data.frame(
+  Tanda = c("+", "-"),
+  Jumlah = c(sum(tanda$Tanda == "+"),
+             sum(tanda$Tanda == "-"))
+)
+
+knitr::kable(ringkasan,
+             caption = "Jumlah Tanda Positif dan Negatif")
+```
+```{r}
+# Jalankan Uji Binomial (Uji Tanda) satu arah kiri
+uji_tanda <- binom.test(x = S_plus, n = n_efektif, p = 0.5, alternative = 'less')
+
+# Tampilkan hasil analisis
+print(uji_tanda)
+```
+### Keputusan
+Karena nilai p-value sebesar 0,0327 lebih kecil dari taraf nyata \(\alpha = 0,05\), maka \(H_0\) ditolak.
+
+### Kesimpulan
+Pada taraf nyata sebesar \(5\%\), terdapat bukti yang cukup untuk menyatakan bahwa skor endurance tikus dengan elektrode pada otak belakang kurang dari 97,5. Hal ini karena diperoleh p-value sebesar 0,0327 yang lebih kecil dari taraf nyata \(\alpha = 0,05\). Dari 11 data efektif yang digunakan dalam pengujian, terdapat 9 skor endurance yang berada di bawah 97,5, sehingga hasil tersebut mendukung klaim bahwa skor endurance tikus dengan elektrode pada otak belakang kurang dari 97,5.
+
+### Syntax R
+```{r}
+# Input data skor endurance tikus
+endurance <- c(93.0, 89.1, 97.7, 84.4, 97.8, 94.5, 88.3, 97.5, 83.7, 94.6, 85.5, 82.6)
+M0 <- 97.5
+
+# Hitung selisih dan eliminasi nol jika ada
+selisih <- endurance - M0
+selisih <- selisih[selisih != 0]
+
+# Hitung jumlah tanda positif (S+) dan ukuran sampel efektif n
+S_plus <- sum(selisih > 0)
+n_efektif <- length(selisih)
+
+# Jalankan Uji Binomial (Uji Tanda) satu arah kiri
+uji_tanda <- binom.test(x = S_plus, n = n_efektif, p = 0.5, alternative = 'less')
+
+# Tampilkan hasil analisis
+print(uji_tanda)
+```
+
+# Uji Binomial (Proporsi Penderita Penyakit)
+## Soal
+Berdasarkan hasil survei di sebuah daerah, ditemukan bahwa 6.9% kelompok wanita berusia 15 sampai 19 tahun positif menderita penyakit Neisseria gonorrhoeae. Di sebuah populasi lain, dari sampel acak 20 wanita pada kelompok usia yang sama dipilih, dan ditemukan 4 wanita mengidap penyakit tersebut.Apakah data sampel ini memberikan cukup bukti untuk mengindikasikan bahwa proporsi wanita yang menderita penyakit tersebut pada populasi yang baru ini lebih besar dari 0.07? Ujilah dengan =0.01 menggunakan Uji Binomial!
+
+## Jawab
+### Formulasi Hipotesis
+H₀: p ≤ 0,07 (Proporsi wanita yang menderita penyakit tersebut pada populasi baru tidak lebih dari 0,07)
+H₁: p > 0,07 (Proporsi wanita yang menderita penyakit tersebut pada populasi baru lebih besar dari 0,07)
+Uji Satu Arah Kanan
+Taraf signifikansi: \(\alpha = 0,01\) (1%)
+
+### Statistik Uji & Synrax R
+```{r}
+# Parameter Uji Binomial
+S <- 4
+n <- 20
+p0 <- 0.07
+
+# Jalankan Uji Binomial 1 Sampel (satu arah kanan)
+uji_binomial <- binom.test(x = S, n = n, p = p0, alternative = "greater")
+
+# Tampilkan hasil analisis
+print(uji_binomial)
+```
+### Keputusan
+Karena nilai p-value sebesar 0,04713 lebih besar dari taraf nyata \(\alpha = 0,01\), maka \(H_0\) gagal ditolak.
+
+### Kesimpulan
+Pada taraf nyata sebesar \(1\%\), tidak terdapat bukti yang cukup untuk mengindikasikan bahwa proporsi wanita berusia 15–19 tahun yang menderita penyakit tersebut pada populasi baru lebih besar dari 0,07. Hal ini karena diperoleh p-value sebesar 0,04713 yang lebih besar dari taraf nyata \(\alpha = 0,01\).
+
+# Uji Wilcoxon (Berat Badan Pemain Sepak Bola)
+## Soal
+Berikut adalah berat badan (dalam pon) dari sampel acak 15 pemain sepak bola di Universitas Texas di Austin:188.0, 211.2, 170.8, 212.4, 156.9, 223.1, 235.9, 183.9, 214.4, 221.0, 162.0, 222.8, 174.1, 210.3, 195.2
+Gunakan Uji Peringkat Bertanda Wilcoxon untuk menguji apakah median berat badan populasi pemain sepak bola tersebut lebih besar dari 163.5 pon! Gunakan taraf nyata 5% (=0.05) dan hitung nilai P-value nya!
+ 
+## Jawab
+### Formulasi Hipotesis
+H₀: M ≤ 163.5 (Berat badan pemain sepak bola tidak lebih dari 163.5 pon)
+H₁: M > 163.5 (Berat badan pemain sepak bola lebih dari 163.5 pon)
+Uji Satu Arah Kanan
+
+### Statistik Uji
+```{r}
+# Input data berat badan pemain sepak bola
+berat <- c(188.0, 211.2, 170.8, 212.4, 156.9, 223.1, 235.9, 183.9, 214.4, 221.0, 162.0, 222.8, 174.1, 210.3, 195.2)
+M0 <- 163.5
+
+# Karakteristik data Wilcoxon Signed Rank
+selisih <- berat - M0
+
+data_rank <- data.frame(
+  Berat_Badan = berat,
+  Selisih = selisih,
+  Absolut_Selisih = abs(selisih),
+  Tanda = ifelse(selisih > 0, "+", "-")
+)
+
+# Ranking berdasarkan nilai absolut selisih
+data_rank$Rank <- rank(data_rank$Absolut_Selisih)
+
+knitr::kable(data_rank,
+             caption = "Ranking Wilcoxon Berdasarkan Selisih Absolut")
+
+```
+```{r}
+# Ringkasan jumlah tanda
+ringkasan <- data.frame(
+  Tanda = c("+", "-"),
+  Jumlah = c(sum(data_rank$Tanda == "+"),
+             sum(data_rank$Tanda == "-"))
+)
+
+knitr::kable(ringkasan,
+             caption = "Jumlah Rank Positif dan Negatif")
+```
+```{r}
+# Jalankan Uji Wilcoxon 1 Sampel (satu arah kanan)
+uji_wilcoxon <- wilcox.test(berat, mu = M0, alternative = "greater",exact = TRUE, correct = TRUE )
+
+# Tampilkan hasil analisis
+print(uji_wilcoxon)
+```
+### Keputusan
+Karena nilai P-value sebesar 0,0001526 lebih kecil dari taraf nyata \(\alpha=0,05\), maka \(H_0\) ditolak.
+
+### Kesimpulan
+Pada taraf nyata sebesar \(5\%\), terdapat bukti yang cukup untuk menyatakan bahwa berat badan populasi pemain sepak bola di Universitas Texas di Austin lebih besar dari 163.5 pon. Hal ini karena diperoleh P-value sebesar 0,0001526 yang lebih kecil dari taraf nyata \(\alpha=0,05\).
+
+### Syntax R
+```{r}
+# Input data berat badan pemain sepak bola
+berat <- c(188.0, 211.2, 170.8, 212.4, 156.9, 223.1, 235.9, 183.9, 214.4, 221.0, 162.0, 222.8, 174.1, 210.3, 195.2)
+M0 <- 163.5
+
+# Jalankan Uji Wilcoxon 1 Sampel (satu arah kanan)
+uji_wilcoxon <- wilcox.test(berat, mu = M0, alternative = "greater",exact = TRUE, correct = TRUE )
+
+# Tampilkan hasil analisis
+print(uji_wilcoxon)
+
+
+```
+
+# Uji Wilcoxon (Skor Kesigapan Siswa)
+## Soal
+Sampel acak dari 20 siswa sekolah dasar yang tidak mengikuti program Head Start memperoleh skor tes kesigapan sebagai berikut:33, 19, 40, 35, 51, 41, 27, 23, 39, 21, 41, 31, 46, 51, 34, 37, 36, 55, 52, 32
+Dapatkah kita menyimpulkan bahwa median skor dari populasi yang diwakili oleh sampel ini kurang dari 45.32? Ujilah menggunakan Uji Wilcoxon pada taraf nyata 5% (=0.05) dan tentukan nilai P-value nya!
+ 
+## Jawab
+### Formulasi Hipotesis
+H₀: M ≥ 45.32 (Median skor kesigapan siswa minimal 45.32)
+H₁: M < 45.32 (Median skor kesigapan siswa kurang dari 45.32)
+Uji Satu Arah Kiri
+
+### Statistik Uji 
+```{r}
+# Input data skor kesigapan siswa
+skor <- c(33, 19, 40, 35, 51, 41, 27, 23, 39, 21,41, 31, 46, 51, 34, 37, 36, 55, 52, 32)
+M0 <- 45.32
+
+# Karakteristik data Wilcoxon Signed Rank
+selisih <- skor - M0
+
+data_rank <- data.frame(
+  skor_kesigapan = skor,
+  Selisih = selisih,
+  Absolut_Selisih = abs(selisih),
+  Tanda = ifelse(selisih > 0, "+", "-")
+)
+
+# Ranking berdasarkan nilai absolut selisih
+data_rank$Rank <- rank(data_rank$Absolut_Selisih)
+
+knitr::kable(data_rank,
+             caption = "Ranking Wilcoxon Berdasarkan Selisih Absolut")
+```
+
+```{r}
+# Ringkasan jumlah tanda
+ringkasan <- data.frame(
+  Tanda = c("+", "-"),
+  Jumlah = c(sum(data_rank$Tanda == "+"),
+             sum(data_rank$Tanda == "-"))
+)
+
+knitr::kable(ringkasan,
+             caption = "Jumlah Rank Positif dan Negatif")
+```
+
+```{r}
+# Jalankan Uji Wilcoxon 1 Sampel
+uji_wilcoxon <- wilcox.test(skor, mu = M0, alternative = 'less', exact = FALSE, correct = TRUE)
+ 
+# Tampilkan hasil analisis
+print(uji_wilcoxon)
+```
+### Keputusan
+Karena nilai P-value sebesar 0,00303 lebih kecil dari taraf nyata \(\alpha=0,05\), maka \(H_0\) ditolak.
+
+### Kesimpulan
+Pada taraf nyata sebesar \(5\%\), terdapat bukti yang cukup untuk menyimpulkan bahwa median skor kesigapan populasi yang diwakili oleh sampel tersebut kurang dari 45.32. Hal ini karena diperoleh P-value sebesar 0,00303 yang lebih kecil dari taraf nyata \(\alpha=0,05\).
+
+
+### Syntax R
+```{r}
+# Input data skor kesigapan siswa
+skor <- c(33, 19, 40, 35, 51, 41, 27, 23, 39, 21,41, 31, 46, 51, 34, 37, 36, 55, 52, 32)
+M0 <- 45.32
+
+# Jalankan Uji Wilcoxon 1 Sampel (satu arah kiri)
+uji_wilcoxon <- wilcox.test(skor, mu = M0,alternative = "less",exact = FALSE,correct = TRUE)
+
+# Tampilkan hasil analisis
+print(uji_wilcoxon)
+```
 
